@@ -15,7 +15,6 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     private static Set<WebSocketSession> clients = Collections.synchronizedSet(new HashSet<>());
 
     @Override
-    // afterConnectionEstablished - 웹소켓 연결이 되면 동작하는 메소드
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         // 클라이언트가 WebSocket 연결을 성공적으로 수립했을 때 호출됨
         clients.add(session); // 세션을 클라이언트 Set에 추가
@@ -24,7 +23,6 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
 
     @Override
-    // handleTextMessage - 메시지를 발송하면 동작하는 메소드
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         // 클라이언트로부터 텍스트 메시지를 수신했을 때 호출됨
         System.out.println("메시지 전송: " + session.getId() + " : " + message.getPayload());
@@ -39,7 +37,6 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     }
 
     @Override
-    // afterConnectionClosed - 웹소켓 연결이 종료되면 동작하는 메소드
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         // 클라이언트가 WebSocket 연결을 닫았을 때 호출됨
         clients.remove(session); // 세션을 클라이언트 Set에서 제거
