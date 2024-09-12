@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket 채팅</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+        /* 채팅 창 스타일 */
+        #chatWindow {
+            border: 1px solid #ccc;
+            width: 380px;
+            height: 400px;
+            overflow-y: scroll;
+            padding: 10px;
+            background-color: #fff;
+        }
+        /* 메시지 입력창 스타일 */
+        #chatMessage {
+            width: 300px;
+            margin-top: 10px;
+        }
+        /* 전송 버튼 스타일 */
+        #sendBtn {
+            margin-top: 10px;
+            padding: 5px 10px;
+        }
+        /* 사용자가 보낸 메시지 스타일 */
+        .myMsg {
+            text-align: right;
+            margin-top: 5px;
+            color: blue;
+        }
+        /* 다른 사용자가 보낸 메시지 스타일 */
+        .otherMsg {
+            margin-top: 5px;
+            color: #f32f00;
+        }
+    </style>
+</head>
+<body>
+<h2>WebSocket 채팅</h2>
+<!-- 채팅 내용이 표시될 창 -->
+<div id="chatWindow"></div>
+<!-- 메시지 입력창 및 전송 버튼 -->
+<input type="text" id="chatMessage" placeholder="메시지 입력" autofocus>
+<button id="sendBtn">전송</button>
+
+<script>
+    let chatWindow, chatMessage, userId;
+    let webSocket = null;
+
+    window.onload = function () {
+        chatWindow = document.getElementById("chatWindow");
+        chatMessage = document.getElementById("chatMessage");
+
+        // URL에서 userId 파라미터 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        userId = urlParams.get('userId');
+
+        if (userId === null || userId.trim() === "") {
+            alert("유효한 사용자 아이디가 없습니다.");
+            window.close(); // 유효한 아이디가 없으면 채팅창을 닫음.
+        } else {
+            connectWebSocket(); // WebSocket 연결 함수 호출
+        }
+    };
+
+    function connectWebSocket() {
+        let wsProtocol = location.protocol === 'https:' ? 'wss://' : 'ws://';
+        let wsUrl = wsProtocol + location.host + '/ChattingServer';
+        webSocket = new WebSocket(wsUrl); // WebSocket 객체 생성
+
+        webSocket.onopen = function (event) {
+            chatWindow.innerHTML += "WebSocket 서버에 연결되었습니다.<br>"; // 연결 성공 메시지 출력
+        };
+
+        webSocket.onmessage = function (event) {
+            let message = event.data;
+            chatWindow.innerHTML += "<div class='otherMsg'>" + message + "</div>"; // 다른 사용자의 메시지를 출력
+            chatWindow.scrollTop = chatWindow.scrollHeight; // 스크롤을 항상 아래로 이동
+        };
+
+        webSocket.onclose = function (event) {
+            chatWindow.innerHTML += "WebSocket 서버가 종료되었습니다.<br>"; // 에러 메시지 출력
+        };
+
+        webSocket.onerror = function (event) {
+            console.error("WebSocket 에러:", event);
+            chatWindow.innerHTML += "채팅 중 에러가 발생하였습니다.<br>";
+        };
+    }
+
+    function sendMessage() {
+        if (webSocket.readyState === WebSocket.OPEN) {
+            let message = chatMessage.value.trim();
+            if (message !== "") {
+                webSocket.send(userId + " : " + message);  // 사용자 아이디와 메시지를 서버로 전송
+                chatWindow.innerHTML += "<div class='myMsg'>" + message + "</div>"; // 자신의 메시지를 출력
+                chatMessage.value = ""; // 메시지 입력창 비우기
+                chatWindow.scrollTop = chatWindow.scrollHeight; // 스크롤을 항상 아래로 이동
+            }
+        } else {
+            console.error("WebSocket 연결이 열리지 않았습니다.");
+        }
+    }
+
+    document.getElementById("sendBtn").addEventListener("click", function () {
+        sendMessage(); // 전송 버튼 클릭 시 sendMessage 함수 호출
+    });
+
+    document.getElementById("chatMessage").addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) { // Enter 키 눌렀을 때 sendMessage 함수 호출
+            sendMessage();
+        }
+    });
+</script>
+
+</body>
+</html>
