@@ -1,4 +1,4 @@
-package com.ohgiraffers.websockettest;
+package com.ohgiraffers.websockettest.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;

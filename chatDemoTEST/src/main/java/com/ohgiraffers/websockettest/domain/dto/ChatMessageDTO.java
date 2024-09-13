@@ -1,4 +1,4 @@
-package com.ohgiraffers.websockettest;
+package com.ohgiraffers.websockettest.domain.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +8,7 @@ import lombok.Setter;
 * */
 @Getter
 @Setter
-public class ChatMessage {
+public class ChatMessageDTO {
     // 메시지 타입 : 입장, 채팅, 나감
     public enum MessageType {
         ENTER, TALK,QUIT

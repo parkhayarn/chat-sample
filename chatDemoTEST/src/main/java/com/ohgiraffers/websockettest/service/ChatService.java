@@ -1,6 +1,7 @@
-package com.ohgiraffers.websockettest;
+package com.ohgiraffers.websockettest.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ohgiraffers.websockettest.domain.dto.ChatRoomDTO;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,24 +20,24 @@ DB와 연동된다면 방을 DB에 저장하겠지만, 아직은 DB연결이 없
 public class ChatService {
 
     private final ObjectMapper objectMapper;
-    private Map<String, ChatRoom> chatRooms;
+    private Map<String, ChatRoomDTO> chatRooms;
 
     @PostConstruct
     private void init() {
         chatRooms = new LinkedHashMap<>();
     }
 
-    public List<ChatRoom> findAllRoom() {
+    public List<ChatRoomDTO> findAllRoom() {
         return new ArrayList<>(chatRooms.values());
     }
 
-    public ChatRoom findRoomById(String roomId) {
+    public ChatRoomDTO findRoomById(String roomId) {
         return chatRooms.get(roomId);
     }
 
-    public ChatRoom createRoom(String name) {
+    public ChatRoomDTO createRoom(String name) {
         String randomId = UUID.randomUUID().toString();
-        ChatRoom chatRoom = ChatRoom.builder()
+        ChatRoomDTO chatRoom = ChatRoomDTO.builder()
                 .roomId(randomId)
                 .name(name)
                 .build();
