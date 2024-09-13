@@ -8,6 +8,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+/*
+* 방을 만드는것과  방을 찾아주는 메소드가 있습니다.
+방을 만들 때는 random한 방 이름으로 만듭니다.
+DB와 연동된다면 방을 DB에 저장하겠지만, 아직은 DB연결이 없기때문에 Map형태로 방을 저장합니다.
+* */
 @Slf4j
 @RequiredArgsConstructor
 @Service
