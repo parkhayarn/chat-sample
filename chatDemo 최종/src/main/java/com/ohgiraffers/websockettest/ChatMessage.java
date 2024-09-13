@@ -3,6 +3,9 @@ package com.ohgiraffers.websockettest;
 import lombok.Getter;
 import lombok.Setter;
 
+/*
+* Enum인 MessageType은 서버가 메세지를 처리할 때 입장, 채팅, 퇴장을 구별하는데 사용됩니다.
+* */
 @Getter
 @Setter
 public class ChatMessage {
