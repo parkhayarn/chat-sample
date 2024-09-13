@@ -1,0 +1,15 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/holdupdb
+    username: quantum
+    password: quantum
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+      format_sql: true
+    show_sql: true
