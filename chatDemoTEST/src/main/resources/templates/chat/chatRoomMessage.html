@@ -16,7 +16,7 @@
 
 <script th:inline="javascript">
     function enterRoom(socket){
-        var enterMsg={"type" : "ENTER","roomId":[[${room.roomId}]],"sender":"chee","msg":""}; //sender는  글쓸때 수정하자.
+        var enterMsg={"type" : "ENTER","roomId":[[${room.id}]],"sender":"chee","msg":""}; //sender는  글쓸때 수정하자.
         socket.send(JSON.stringify(enterMsg));
     }
     let socket = new WebSocket("ws://localhost:8080/ws/chat");
@@ -46,13 +46,13 @@
     //메세지 보내기 버튼 눌렀을 떄..
     function sendMsg() {
         let content=document.querySelector('.content').value;
-        var talkMsg={"type" : "TALK","roomId":[[${room.roomId}]] ,"sender":"chee","msg":content};
+        var talkMsg={"type" : "TALK","roomId":[[${room.id}]] ,"sender":"chee","msg":content};
         socket.send(JSON.stringify(talkMsg));
     }
 
     //방 나가기 버튼을 눌렀을때
     function quit(){
-        var quitMsg={"type" : "QUIT","roomId":[[${room.roomId}]] ,"sender":"chee","msg":""};
+        var quitMsg={"type" : "QUIT","roomId":[[${room.id}]] ,"sender":"chee","msg":""};
         socket.send(JSON.stringify(quitMsg));
         socket.close();
         location.href="http://localhost:8080/chat/chatList"; // location.href= 사용시에는 보여줄 페이지 주소형식으로 작성

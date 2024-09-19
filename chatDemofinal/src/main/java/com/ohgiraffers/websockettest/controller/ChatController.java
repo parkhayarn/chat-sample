@@ -65,18 +65,13 @@ public class ChatController {
     // 채팅방 만들기를 했을때 해당 채팅방으로 바로 접속하고
     // 채팅방에 내용을 보여주는 곳
     @PostMapping("/createRoom")
-    private String createRoom(Model model, @RequestBody RoomCreateReq requestDto) {
+    private String createRoom(Model model, @RequestBody  requestDto) {
         ChatRoomEntity newRoom = chatService.createRoom(requestDto.name);
         ChatMessageEntity newMessage = chatMessageService.createMessage(requestDto.name);
         model.addAttribute("room", newRoom);
         model.addAttribute("message", newMessage);
         return "chat/chatRoomMessage";
     }
-
-    // 채팅방 전체리스트에서 특정 채팅방을 선택하고 삭제를 했을때
-    // 특정 채팅방이 삭제된 후 채팅방 전체리스트를 다시 보여주는 곳
-
-
     // 비어 있으면 무슨 뜻일까? 어떤 주소로 요청을 줘야 할까?
     // 맞춰봐.
     // 1. /chat : @PostMapping("")
@@ -135,12 +130,4 @@ public class ChatController {
     // 그래서 보통은 DTO를 따로 떼어서 쓰긴 하는데, 뭐,,, entity를 직접
     // 응답으로 주는 정도가 아니라면 지금 레벨에선 크게 고려안해도 될 것 가탕
     // 근데 서비서 규모가 커지면,, 생각해봐야겠지? <- POJO
-
-    // VO는 뭐죠?
-
-    // 주로 데이터를 내보내는 경우(DTO), 설정 클래스, 특수한 데이터를 얻으려면 record메시지를 보내기
-    record RoomCreateReq(
-            String name
-    ) {
-    }
 }

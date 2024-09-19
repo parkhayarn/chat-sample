@@ -8,30 +8,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
- * 특별할 건 없지만 방 한개마다 여러사용자들을 Set형태로 가지고 있습니다.
+ * Enum인 MessageType은 서버가 메세지를 처리할 때 입장, 채팅, 퇴장을 구별하는데 사용됩니다.
  * */
-
 @Entity
-@Table(name = "chat_room")
+@Table(name = "chat_message")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
 @AllArgsConstructor
 @Builder
-public class ChatRoomEntity {
-
+public class ChatMessageEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(nullable = false)
-    private String name;
 
     @Column(nullable = false)
-    private LocalDateTime creationTime;
+    private String sender;
 
-    @OneToMany
-    @JoinColumn(name = "room_id")
-    private List<ChatMessageEntity> chattingMessages = new ArrayList<>();
+    @Column(nullable = false)
+    private String message;
+
+    @Column(nullable = false)
+    private LocalDateTime timestamp;
+
 
 }

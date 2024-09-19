@@ -1,13 +1,13 @@
 package com.ohgiraffers.websockettest.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ohgiraffers.websockettest.domain.dto.ChatRoomDTO;
-import jakarta.annotation.PostConstruct;
+import com.ohgiraffers.websockettest.entity.ChatRoomEntity;
+import com.ohgiraffers.websockettest.repository.ChatRoomRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
 
 /*
 * 방을 만드는것과  방을 찾아주는 메소드가 있습니다.
@@ -19,29 +19,23 @@ DB와 연동된다면 방을 DB에 저장하겠지만, 아직은 DB연결이 없
 @Service
 public class ChatService {
 
-    private final ObjectMapper objectMapper;
-    private Map<String, ChatRoomDTO> chatRooms;
+    private final ChatRoomRepository chatRoomRepository;
 
-    @PostConstruct
-    private void init() {
-        chatRooms = new LinkedHashMap<>();
+    public List<ChatRoomEntity> findAllRoom() {
+        return this.chatRoomRepository.findAll();
     }
 
-    public List<ChatRoomDTO> findAllRoom() {
-        return new ArrayList<>(chatRooms.values());
+    public ChatRoomEntity findById(final long id) {
+        return this.chatRoomRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
     }
 
-    public ChatRoomDTO findRoomById(String roomId) {
-        return chatRooms.get(roomId);
-    }
-
-    public ChatRoomDTO createRoom(String name) {
-        String randomId = UUID.randomUUID().toString();
-        ChatRoomDTO chatRoom = ChatRoomDTO.builder()
-                .roomId(randomId)
+    // createRoom 채팅방을 생성해서 생성된 방을 보여줄 수 있도록 하는곳
+    // Id에 할당된 값을 알려줄려고
+    @Transactional
+    public ChatRoomEntity createRoom(final String name) {
+        ChatRoomEntity newRoom = ChatRoomEntity.builder()
                 .name(name)
                 .build();
-        chatRooms.put(randomId, chatRoom);
-        return chatRoom;
+        return this.chatRoomRepository.save(newRoom);
     }
 }
