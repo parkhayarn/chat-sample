@@ -19,10 +19,6 @@ import java.util.List;
 @Builder
 public class ChatMessageEntity {
 
-    @OneToMany
-    @JoinColumn(name = "room_id")
-    private List<ChatRoomEntity> chatRoomEntityList = new ArrayList<>();
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -36,5 +32,5 @@ public class ChatMessageEntity {
     @Column(nullable = false)
     private LocalDateTime timestamp;
 
-    // 뭘써야할까?...
+
 }

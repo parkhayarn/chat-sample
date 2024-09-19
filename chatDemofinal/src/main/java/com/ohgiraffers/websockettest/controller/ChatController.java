@@ -1,5 +1,6 @@
 package com.ohgiraffers.websockettest.controller;
 
+import com.ohgiraffers.websockettest.entity.ChatMessageEntity;
 import com.ohgiraffers.websockettest.entity.ChatRoomEntity;
 import com.ohgiraffers.websockettest.service.ChatMessageService;
 import com.ohgiraffers.websockettest.service.ChatService;
@@ -24,35 +25,19 @@ public class ChatController {
     // GET /chat/{id} (한 건 조회)
     // POST /chat (채팅방 생성)
 
-    // GetMapping으로 바꿔줄거같아
-    @GetMapping("/chatList")
-    public String chatList(Model model) {
-        List<ChatRoomEntity> roomList = chatService.findAllRoom();
-        model.addAttribute("roomList", roomList);
-        return "chat/chatList";
-    }
-
     // 1. 경로 정리 <- RequestMapping
     // 2. 이름이 장황해졌어! 왤까?
     // 3. 맞아, 짧은 이름보단 길어도 괜찮으니까 차라리 긴게 나아
     // 4. 근거는 나중에 이거 RESTful API로 바꿀 수도 있을 것 같아서
-    // 그래서 `render`를 붙였어, 더 적당한 이름은 누나가 고민해봐도 좋을 것 같음 ㅎㅎ
+    // 그래서 `render`를 붙였어
 
     // Yub
-    @GetMapping("")
+    // 현재 채팅하고 있는 채팅방 전체리스트를 보여주는곳
+    @GetMapping("/chatList")
     public String renderChatRoomList(Model model) {
         List<ChatRoomEntity> roomList = chatService.findAllRoom();
         model.addAttribute("roomList", roomList);
         return "chat/chatList";
-    }
-
-    @GetMapping("/chat/chatRoom")
-    public String chatRoom(Model model, @RequestParam long id) {
-        ChatRoomEntity room = chatService.findById(id);
-//        ChatMessageEntity message = chatMessageService.findMessageById()
-        model.addAttribute("room", room);
-//        model.addAttribute("chatMessage", );
-        return "chat/chatRoom";
     }
 
     // 아까 계층 얘기했었잖아? 이렇게 API URL을 써주면 `/chat/3` 이런 식으로 요청할 수 있어
@@ -70,19 +55,27 @@ public class ChatController {
     // 보통 path variable로 써준다!
 
     // Yub
-    @GetMapping("/{id}")
-    public String renderChatRoomPage(Model model, @PathVariable long id) {
-        ChatRoomEntity room = chatService.findById(id);
-        model.addAttribute("room", room);
-        return "chat/chatRoom";
+//    @GetMapping("/chat/{id}")
+//    public String renderChatRoomPage(Model model, @PathVariable long id){
+//        ChatRoomEntity room = chatService.findById(id);
+//        model.addAttribute("room", room);
+//        return "chat/chatList";
+//    }
+
+    // 채팅방 만들기를 했을때 해당 채팅방으로 바로 접속하고
+    // 채팅방에 내용을 보여주는 곳
+    @PostMapping("/createRoom")
+    private String createRoom(Model model, @RequestBody RoomCreateReq requestDto) {
+        ChatRoomEntity newRoom = chatService.createRoom(requestDto.name);
+        ChatMessageEntity newMessage = chatMessageService.createMessage(requestDto.name);
+        model.addAttribute("room", newRoom);
+        model.addAttribute("message", newMessage);
+        return "chat/chatRoomMessage";
     }
 
-    @PostMapping("/chat")
-    public String createRoom(Model model, @RequestBody RoomCreateReq requestDto) {
-        ChatRoomEntity newRoom = chatService.createRoom(requestDto.name);
-        model.addAttribute("room", newRoom);
-        return "chat/chatRoom";
-    }
+    // 채팅방 전체리스트에서 특정 채팅방을 선택하고 삭제를 했을때
+    // 특정 채팅방이 삭제된 후 채팅방 전체리스트를 다시 보여주는 곳
+
 
     // 비어 있으면 무슨 뜻일까? 어떤 주소로 요청을 줘야 할까?
     // 맞춰봐.
@@ -90,12 +83,12 @@ public class ChatController {
     // 2. /chat/ : @PostMapping("/")
     // 1번이야, 근데 이걸로 아마 코딩 인생에 한 세 번쯤은 골머리 썩어볼꺼라서 미리 알려줌 ㅋㅋㅋㅋ
     // Yub
-    @PostMapping("")
-    public String createRoomAndRedirectToChatRoomPage(Model model, @RequestBody RoomCreateReq requestDto) {
-        ChatRoomEntity newRoom = chatService.createRoom(requestDto.name);
-        model.addAttribute("room", newRoom);
-        return "chat/chatRoom";
-    }
+//    @PostMapping("/chatRoom")
+//    private String createRoomAndRedirectToChatRoomPage(Model model, @RequestBody RoomCreateReq requestDto) {
+//        ChatRoomEntity newRoom = chatService.createRoom(requestDto.name);
+//        model.addAttribute("room", newRoom);
+//        return "chat/chatRoomMessage";
+//    }
 
     // Domain은 요즘은 POJO로 쓰는게 정석,,? 느낌인뎅
     // Plain Old Java Object
@@ -130,9 +123,7 @@ public class ChatController {
 
     // DTO가 뭐죠?
     // Data Transfer Object
-    // 전송한다는게 어디서 어디로 가는거지?
-    // "프로세스 간에"? 띠띠띠띠띠띠ㄸ띠ㄸ띠ㅣ띠
-    // "계층" 간에가 맞아
+    // "계층" 간의 전송
     // 우리가 3-tier arch.를 쓰잖아? controller-service-repo.
     // 나누는 이유는 유지보수의 용이함, 계층간의 논리적인 결합 정도를 낮추는게 목표
     // 그래서 쓰는게 DTO야, 왜냐? 아까 얘기한 것처럼 Repository 레이어의 객체가
@@ -147,6 +138,7 @@ public class ChatController {
 
     // VO는 뭐죠?
 
+    // 주로 데이터를 내보내는 경우(DTO), 설정 클래스, 특수한 데이터를 얻으려면 record메시지를 보내기
     record RoomCreateReq(
             String name
     ) {

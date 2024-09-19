@@ -15,7 +15,6 @@ import java.util.List;
 @Service
 public class ChatMessageService {
     private final ChatMessageRepository chatMessageRepository;
-    private final ChatService chatService;
 
     public List<ChatMessageEntity> findAllMessage() {
         return this.chatMessageRepository.findAll();
@@ -28,12 +27,13 @@ public class ChatMessageService {
         return this.chatMessageRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
     }
 
+    // createMessage 메시지를 생성해서 생성된 메시지를 보여줄 수 있도록 하는곳
     @Transactional
-    public ChatMessageEntity createMessage(final long roomId, final String senderUsername, final String message) {
-        // 해당 id를 가지는 방을 찾아서
-        ChatRoomEntity chatRoomEntity = chatService.findById(roomId);
-        // 해당 방과 연결된 새 메시지를 추가
-        ChatMessageEntity newMessage = chatRoomEntity.createNewMessage(senderUsername, message);
-        return newMessage;
+    public ChatMessageEntity createMessage(final String name) {
+        ChatMessageEntity newMessage = ChatMessageEntity.builder()
+                .message(name)
+                .build();
+        return this.chatMessageRepository.save(newMessage);
     }
 }
+
