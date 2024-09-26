@@ -1,7 +1,7 @@
 // src/apis/chatApi.js
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8080/holdup';
+const API_URL = 'http://localhost:8080/api/chat';
 
 // 채팅방 목록 조회
 export const fetchChatRooms = async () => {
