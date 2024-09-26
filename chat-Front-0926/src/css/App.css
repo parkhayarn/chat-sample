@@ -1,0 +1,12 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.chat-room {
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.chat-room-list {
+    padding: 10px;
+}
