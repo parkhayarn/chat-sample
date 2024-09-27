@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { fetchChatMessages, sendMessage } from '../apis/chatApi';
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { callCreateChatRoomAPI } from "../../apis/ChatRoomCreateAPICall";
 
-const ChatRoom = ({ roomId }) => {
+const CreateChatRoomForm = ({ roomId }) => {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
 
@@ -39,4 +40,4 @@ const ChatRoom = ({ roomId }) => {
     );
 };
 
-export default ChatRoom;
+export default CreateChatRoomForm;

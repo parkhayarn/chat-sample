@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchChatRooms, createChatRoom } from '../apis/chatApi';
+import { fetchChatRooms, createChatRoom } from '../../apis/chatApi';
 
 const ChatRoomList = ({ onSelectRoom }) => {
     const [rooms, setRooms] = useState([]);

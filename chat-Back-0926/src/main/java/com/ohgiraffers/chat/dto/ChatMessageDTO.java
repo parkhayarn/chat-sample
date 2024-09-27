@@ -1,14 +1,11 @@
 package com.ohgiraffers.chat.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class ChatMessageDTO {
     private Long id;
-    private String sender;
     private String content;
-    private Long roomId;
-    private String timestamp;
+    private String sender;
+    private Long chatRoomId;
 }

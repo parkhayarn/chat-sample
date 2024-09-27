@@ -1,7 +1,6 @@
-import React from 'react';
-import ChatRoomList from '../components/ChatRoomList';
+import ChatRoomList from "../components/forms/ChatRoomListForm"
 
-const RoomListPage = ({ history }) => {
+const ChatRoomList = ({ history }) => {
     const handleSelectRoom = (roomId) => {
         history.push(`/chat/${roomId}`);
     };
@@ -9,4 +8,4 @@ const RoomListPage = ({ history }) => {
     return <ChatRoomList onSelectRoom={handleSelectRoom} />;
 };
 
-export default RoomListPage;
+export default ChatRoomList;

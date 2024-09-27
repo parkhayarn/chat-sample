@@ -1,24 +1,18 @@
 package com.ohgiraffers.chat.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-import java.time.LocalDateTime;
-
+@Data
 @Entity
-@Getter
-@Setter
 public class ChatMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String content;
+    private String sender;
 
     @ManyToOne
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
-
-    private String sender;
-    private String content;
-    private LocalDateTime timestamp;
 }

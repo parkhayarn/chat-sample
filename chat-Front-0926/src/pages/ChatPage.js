@@ -1,9 +1,12 @@
 import React from 'react';
-import ChatRoom from '../components/ChatRoom';
 
-const ChatPage = ({ match }) => {
-    const { roomId } = match.params;
-    return <ChatRoom roomId={roomId} />;
-};
+function ChatPage() {
+    return (
+        <div>
+            <h1>Chat Page</h1>
+            {/* 채팅 페이지 내용 */}
+        </div>
+    );
+}
 
 export default ChatPage;
