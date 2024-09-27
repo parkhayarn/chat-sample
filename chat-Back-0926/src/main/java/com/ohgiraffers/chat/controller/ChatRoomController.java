@@ -2,14 +2,13 @@ package com.ohgiraffers.chat.controller;
 
 import com.ohgiraffers.chat.dto.ChatRoomDTO;
 import com.ohgiraffers.chat.service.ChatRoomService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/chatroom's")
+@RequestMapping("chat")
 public class ChatRoomController {
 
     private final ChatRoomService chatRoomService;

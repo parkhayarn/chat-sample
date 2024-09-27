@@ -1,8 +1,11 @@
 package com.ohgiraffers.chat.dto;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ChatRoomDTO {
     private Long id;
     private String name;
