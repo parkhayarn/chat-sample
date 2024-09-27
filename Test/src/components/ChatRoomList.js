@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { getChatRooms, createChatRoom, leaveChatRoom } from '../services/chatRoomService';
 
 const ChatRoomList = ({ onRoomSelect }) => {
-    console.log("ChatRoomList component rendered");
-    
     const [rooms, setRooms] = useState([]);
     const [newRoomName, setNewRoomName] = useState('');
 

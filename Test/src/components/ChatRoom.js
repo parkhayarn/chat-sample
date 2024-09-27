@@ -2,40 +2,11 @@ import React, { useState, useEffect } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import { sendMessage, getMessages } from '../services/chatService';
-import axios from 'axios';
 
 const ChatRoom = ({ roomId }) => {
-    console.log("ChatRoom component rendered", roomId);
-
     const [stompClient, setStompClient] = useState(null);
     const [messages, setMessages] = useState([]);
     const [messageInput, setMessageInput] = useState('');
-    const [rooms, setRooms] = useState([]);
-
-    // getChatRooms 함수 정의
-    const getChatRooms = async () => {
-        try {
-            const response = await axios.get('/api/chatrooms'); // API 호출
-            setRooms(response.data); // 상태 업데이트
-        } catch (error) {
-            console.error('Error fetching chat rooms:', error);
-        }
-    };
-
-    useEffect(() => {
-        getChatRooms(); // 컴포넌트가 마운트될 때 호출
-    }, []);
-
-    useEffect(() => {
-        loadRooms();
-    }, []);
-
-    const loadRooms = () => {
-        getChatRooms().then((data) => {
-            console.log("Loaded chat rooms:", data);
-            setRooms(data);
-        });
-    };
 
     useEffect(() => {
         const socket = new SockJS('http://localhost:8080/ws');
@@ -72,9 +43,6 @@ const ChatRoom = ({ roomId }) => {
             <div>
                 {messages.map((msg, index) => (
                     <div key={index}>{`${msg.sender}: ${msg.content}`}</div>
-                ))}
-                {rooms.map(room => (
-                    <div key={room.id}>{room.name}</div> // 채팅방 목록 렌더링
                 ))}
             </div>
             <input

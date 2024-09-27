@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8080/chat';
+const API_URL = 'http://localhost:8080/api/chatrooms';
 
 export const getChatRooms = () => {
     return axios.get(API_URL).then((response) => response.data);
