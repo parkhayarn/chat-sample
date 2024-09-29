@@ -1,36 +1,40 @@
 package com.ohgiraffers.chat.service;
 
-import com.ohgiraffers.chat.dto.ChatMessageDTO;
-import com.ohgiraffers.chat.entity.ChatMessage;
 import com.ohgiraffers.chat.entity.ChatRoom;
-import com.ohgiraffers.chat.repository.ChatMessageRepository;
+import com.ohgiraffers.chat.entity.Message;
 import com.ohgiraffers.chat.repository.ChatRoomRepository;
+import com.ohgiraffers.chat.repository.MessageRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ChatService {
 
-    private final ChatMessageRepository chatMessageRepository;
-
     private final ChatRoomRepository chatRoomRepository;
+    private final MessageRepository messageRepository;
 
-    public ChatService(ChatMessageRepository chatMessageRepository, ChatRoomRepository chatRoomRepository) {
-        this.chatMessageRepository = chatMessageRepository;
+    public ChatService(ChatRoomRepository chatRoomRepository, MessageRepository messageRepository) {
         this.chatRoomRepository = chatRoomRepository;
+        this.messageRepository = messageRepository;
     }
 
-    public ChatMessageDTO saveAndSendMessage(ChatMessageDTO chatMessageDTO) {
-        ChatRoom chatRoom = chatRoomRepository.findById(chatMessageDTO.getChatRoomId())
-                .orElseThrow(() -> new RuntimeException("Chat room not found"));
+    public ChatRoom createChatRoom(String name) {
+        ChatRoom chatRoom = new ChatRoom();
+        chatRoom.setName(name);
+        return chatRoomRepository.save(chatRoom);
+    }
 
-        ChatMessage chatMessage = new ChatMessage();
-        chatMessage.setContent(chatMessageDTO.getContent());
-        chatMessage.setSender(chatMessageDTO.getSender());
-        chatMessage.setChatRoom(chatRoom);
+    public List<ChatRoom> getAllChatRooms() {
+        return chatRoomRepository.findAll();
+    }
 
-        chatMessage = chatMessageRepository.save(chatMessage);
+    public Message saveMessage(Message message) {
+        return messageRepository.save(message);
+    }
 
-        chatMessageDTO.setId(chatMessage.getId());
-        return chatMessageDTO;
+    public List<Message> getMessagesByChatRoom(Long chatRoomId) {
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).orElseThrow();
+        return chatRoom.getMessages();
     }
 }
