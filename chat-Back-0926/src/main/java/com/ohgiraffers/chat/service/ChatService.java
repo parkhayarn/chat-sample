@@ -6,6 +6,7 @@ import com.ohgiraffers.chat.repository.ChatRoomRepository;
 import com.ohgiraffers.chat.repository.MessageRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -29,8 +30,13 @@ public class ChatService {
         return chatRoomRepository.findAll();
     }
 
-    public Message saveMessage(Message message) {
-        return messageRepository.save(message);
+    public void saveMessage(String sender, String content, String roomId) {
+        Message message = new Message();
+        message.setSender(sender);
+        message.setContent(content);
+        message.setRoomId(roomId);
+        message.setTimestamp(LocalDateTime.now());
+        messageRepository.save(message);
     }
 
     public List<Message> getMessagesByChatRoom(Long chatRoomId) {

@@ -2,14 +2,14 @@ package com.ohgiraffers.chat.dto;
 
 import lombok.*;
 
+import java.awt.*;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChatMessageDTO {
-    private Long id;
-    private String sender;
+    private TrayIcon.MessageType type;
     private String content;
-    private Long chatRoomId;
-    private String timestamp;
+    private String sender;
 }
