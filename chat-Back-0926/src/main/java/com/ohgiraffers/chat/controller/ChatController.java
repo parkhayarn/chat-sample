@@ -17,11 +17,9 @@ import java.util.List;
 public class ChatController {
 
     private final ChatService chatService;
-    private final MessageRepository messageRepository;
 
     public ChatController(ChatService chatService, MessageRepository messageRepository) {
         this.chatService = chatService;
-        this.messageRepository = messageRepository;
     }
 
     @PostMapping("/rooms")
@@ -34,6 +32,7 @@ public class ChatController {
         return chatService.getAllChatRooms();
     }
 
+    // 채팅방의 메시지 기록불러오기
     @GetMapping("/rooms/{id}/messages")
     public List<com.ohgiraffers.chat.entity.Message> getMessages(@PathVariable Long id) {
         return chatService.getMessagesByChatRoom(id);

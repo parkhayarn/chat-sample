@@ -30,6 +30,7 @@ public class ChatService {
         return chatRoomRepository.findAll();
     }
 
+    // 메시지 저장
     public void saveMessage(String sender, String content, String roomId) {
         Message message = new Message();
         message.setSender(sender);
@@ -39,8 +40,10 @@ public class ChatService {
         messageRepository.save(message);
     }
 
+    // 특정 채팅방의 메시지 기록 가져오기
     public List<Message> getMessagesByChatRoom(Long chatRoomId) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).orElseThrow();
         return chatRoom.getMessages();
     }
+
 }
